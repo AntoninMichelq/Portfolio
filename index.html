@@ -55,7 +55,12 @@ a { color: inherit; }
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 20px; min-height: 44px; }
 .seal { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; background: var(--seal); color: var(--on-seal); font-family: var(--display); font-weight: 700; font-size: 15px; border-radius: 6px; transform: rotate(-6deg); transition: transform .3s; }
 .brand:hover .seal { transform: rotate(6deg) scale(1.08); }
-.top-actions { display: flex; align-items: center; gap: 8px 20px; }
+.seal-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); transition: transform .3s; }
+.brand:hover .seal-img { transform: rotate(6deg) scale(1.1); }
+.top-actions { position: relative; display: flex; align-items: center; gap: 8px 20px; }
+.menu { position: absolute; top: calc(100% + 10px); right: 0; width: 190px; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14); display: flex; flex-direction: column; animation: menu-in .2s ease-out; }
+.menu a { display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 9px; text-decoration: none; font-size: 15px; transition: background-color .15s, color .15s, padding-left .15s; }
+.menu a:hover, .menu a:focus-visible { background: var(--accent); color: var(--on-accent); padding-left: 18px; }
 .top-link { text-decoration: none; padding: 12px 4px; position: relative; }
 .top-link::after, .foot a::after, .inline-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .3s; }
 .top-link:hover::after, .foot a:hover::after, .inline-link:hover::after { transform: scaleX(1); }
@@ -63,11 +68,6 @@ a { color: inherit; }
 .toggle:hover, .toggle[aria-expanded="true"] { background: var(--ink); color: var(--bg); }
 .toggle .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--seal); transition: transform .2s; }
 .toggle[aria-expanded="true"] .dot { transform: scale(1.6); }
-.menu { position: fixed; inset: 0; z-index: 20; background: var(--accent); color: var(--on-accent); overflow-y: auto; animation: menu-in .35s ease-out; }
-.menu-in { padding-block: 120px 48px; display: flex; flex-direction: column; gap: 4px; }
-.menu a { display: flex; align-items: baseline; gap: 20px; padding: 10px 0; text-decoration: none; font-family: var(--display); font-weight: 500; font-size: clamp(34px, 7vw, 76px); line-height: 1.15; border-bottom: 1px solid color-mix(in srgb, var(--on-accent) 30%, transparent); transition: padding-left .25s; }
-.menu a:hover, .menu a:focus-visible { padding-left: 24px; }
-.menu a span { font-family: var(--mono); font-size: 14px; letter-spacing: 0.08em; }
 
 /* Accueil */
 .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
@@ -210,7 +210,7 @@ img.xp-logo { object-fit: cover; background: #FFFFFF; border: 1px solid var(--li
 .foot-in { padding-block: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px; color: var(--muted); }
 .foot a, .inline-link { position: relative; text-decoration: none; padding: 12px 0; display: inline-block; }
 
-@keyframes menu-in { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.7); opacity: .45; } }
 @keyframes rise { from { opacity: .4; transform: translateY(32px); } to { opacity: 1; transform: none; } }
 @supports (animation-timeline: view()) {
@@ -244,42 +244,27 @@ img.xp-logo { object-fit: cover; background: #FFFFFF; border: 1px solid var(--li
     <a class="brand" href="#accueil"><span class="seal" aria-hidden="true">AM</span>Antonin Michel</a>
     <div class="top-actions">
       <a class="top-link" href="#projets">Projets</a>
-      <button class="toggle" type="button" id="toggle" aria-expanded="false" aria-controls="menu"><span class="dot" aria-hidden="true"></span>Menu · <span id="toggle-state">Fermé</span></button>
+      <button class="toggle" type="button" id="toggle" aria-expanded="false" aria-controls="menu"><span class="dot" aria-hidden="true"></span>Menu</button>
+      <nav class="menu" id="menu" aria-label="Menu principal" hidden>
+        <a href="#projets">Projets</a>
+        <a href="#apropos">Parcours</a>
+        <a href="#competences">Compétences</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
   </div>
 </header>
 
-<nav class="menu" id="menu" aria-label="Menu principal" hidden>
-  <div class="wrap menu-in">
-    <a href="#accueil"><span>00</span>Accueil</a>
-    <a href="#projets"><span>01</span>Projets</a>
-    <a href="#apropos"><span>02</span>Parcours</a>
-    <a href="#competences"><span>03</span>Compétences</a>
-    <a href="#contact"><span>04</span>Contact</a>
-  </div>
-</nav>
 
-<main>
-  <section class="hero" id="accueil">
-    <canvas id="scene" role="img" aria-label="Paysage vu du dessus : une rivière, un chemin et un pont dans un pré fleuri"></canvas>
-    <div class="wrap hero-in">
-      <div>
-        <h1 class="sr">Portfolio d'Antonin Michel</h1>
-        <p class="mono hero-tag">Antonin Michel · L3 Informatique</p>
-      </div>
-      <a class="btn" href="#projets">Voir les projets
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M6 13l6 6 6-6"></path></svg>
-      </a>
-    </div>
-  </section>
-  <div class="lattice" aria-hidden="true"></div>
+<main id="accueil">
+  <h1 class="sr">Portfolio d'Antonin Michel</h1>
+  
 
   <section class="section" id="projets">
     <div class="wrap">
       <div class="proj-head reveal">
         <div class="head-main">
-          <p class="mono label" style="color:var(--accent)">Le formulaire</p>
-          <h2 style="font-family:var(--display);font-weight:500;font-size:clamp(34px,5vw,64px);line-height:1.1;letter-spacing:-0.01em">Projets choisis</h2>
+          <h2 style="font-family:var(--display);font-weight:500;font-size:clamp(34px,5vw,64px);line-height:1.1;letter-spacing:-0.01em">Projets</h2>
         </div>
         <div class="ctrl">
           <button class="nav-btn" type="button" id="prev" aria-label="Projet précédent"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></button>
@@ -336,7 +321,6 @@ img.xp-logo { object-fit: cover; background: #FFFFFF; border: 1px solid var(--li
   <section class="wrap section" id="apropos">
     <div class="head reveal">
       <div class="head-main">
-        <p class="mono label">Le préparateur</p>
         <h2>Parcours</h2>
       </div>
     </div>
@@ -388,7 +372,6 @@ img.xp-logo { object-fit: cover; background: #FFFFFF; border: 1px solid var(--li
   <section class="wrap section" id="competences">
     <div class="head reveal">
       <div class="head-main">
-        <p class="mono label">Le meuble à tiroirs</p>
         <h2>Compétences</h2>
       </div>
       
@@ -427,10 +410,10 @@ img.xp-logo { object-fit: cover; background: #FFFFFF; border: 1px solid var(--li
   <section class="avail" aria-label="Disponibilité">
     <div class="wrap avail-in">
       <div>
-        <p class="mono" style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span class="pulse" aria-hidden="true"></span>Disponible</p>
+        <p class="mono" style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span class="pulse" aria-hidden="true"></span>Recherche</p>
         <h2>Stage, avril – mai 2027</h2>
       </div>
-      <p>Huit semaines minimum.</p>
+      
     </div>
   </section>
 
@@ -461,15 +444,26 @@ img.xp-logo { object-fit: cover; background: #FFFFFF; border: 1px solid var(--li
 (function () {
   var $ = function (id) { return document.getElementById(id); };
 
+  /* Image de profil : si un fichier avatar.png est posé à côté de la page, il remplace le sceau AM */
+  var avatar = new Image();
+  avatar.onload = function () {
+    var seal = document.querySelector('.brand .seal');
+    if (!seal) return;
+    avatar.className = 'seal-img';
+    avatar.alt = '';
+    seal.replaceWith(avatar);
+  };
+  avatar.src = 'avatar.png';
+
   /* Menu */
-  var toggle = $('toggle'), menu = $('menu'), state = $('toggle-state');
+  var toggle = $('toggle'), menu = $('menu');
   function setMenu(open) {
     menu.hidden = !open;
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    state.textContent = open ? 'Ouvert' : 'Fermé';
   }
   toggle.addEventListener('click', function () { setMenu(menu.hidden); });
   menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('click', function (e) { if (!menu.hidden && !e.target.closest('.top-actions')) setMenu(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); toggle.focus(); } });
 
   /* Slider des projets */
@@ -539,244 +533,6 @@ img.xp-logo { object-fit: cover; background: #FFFFFF; border: 1px solid var(--li
     } catch (e) { fallback(); }
   });
 
-  /* Accueil : paysage vu du dessus, le curseur souffle du vent */
-  var hero = $('accueil'), canvas = $('scene'), ctx = canvas.getContext('2d');
-  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 0, sc = 1, time = 0, frame = 0, visible = true;
-  var px = -999, py = -999, wvx = 0, wvy = 0, inside = false, bridge = null;
-  var col = {}, tufts = [], flowers = [], bushes = [], trees = [], lilies = [], rocks = [], blobs = [], stones = [], petals = [], streaks = [], ripples = [];
-  var WOOD = '#B98A5A', WOOD_D = '#7E5A38', ROCK = '#C6CCC2';
-  function readColors() {
-    var cs = getComputedStyle(document.documentElement);
-    ['bg', 'surface', 'line', 'meadow', 'path', 'sky', 'jade', 'seal', 'accent'].forEach(function (k) { col[k] = cs.getPropertyValue('--' + k).trim(); });
-  }
-  function ry(x) { return H * 0.52 + Math.sin(x / W * 5.2 + 0.4) * H * 0.16 + Math.sin(x / W * 11) * H * 0.03; }
-  function hw(x) { return H * 0.085 + Math.sin(x / W * 7) * H * 0.02; }
-  function pathX(y) { return W * 0.3 + Math.sin(y / H * 3 + 0.5) * W * 0.06 + (y / H) * W * 0.12; }
-  function onRiver(x, y, m) { return Math.abs(y - ry(x)) < hw(x) + m; }
-  function onPath(x, y, m) { return Math.abs(x - pathX(y)) < 11 * sc + m; }
-  function seeded(seed) { return function () { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }; }
-  function el(o) { o.ox = 0; o.oy = 0; o.vx = 0; o.vy = 0; return o; }
-  function scatter(rnd, n, margin, make) {
-    var out = [], guard = 0;
-    while (out.length < n && guard++ < n * 30) {
-      var x = rnd() * W, y = rnd() * H;
-      if (onRiver(x, y, margin) || onPath(x, y, margin)) continue;
-      out.push(el(make(x, y)));
-    }
-    return out;
-  }
-  function build() {
-    var r = canvas.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
-    W = r.width; H = r.height; sc = Math.max(0.7, Math.min(1.15, W / 1200));
-    canvas.width = Math.round(W * d); canvas.height = Math.round(H * d);
-    ctx.setTransform(d, 0, 0, d, 0, 0);
-    var rnd = seeded(11), area = W * H, i;
-    blobs = [];
-    for (i = 0; i < 16; i++) blobs.push({ x: rnd() * W, y: rnd() * H, rx: (60 + rnd() * 140) * sc, ry: (40 + rnd() * 80) * sc, light: rnd() < 0.5, rot: rnd() * 3 });
-    tufts = scatter(rnd, Math.min(950, Math.round(area / 1100)), 6, function (x, y) { return { x: x, y: y, ph: rnd() * 6.28, light: rnd() < 0.4, len: (5 + rnd() * 5) * sc }; });
-    tufts.sort(function (a, b) { return a.y - b.y; });
-    flowers = scatter(rnd, Math.round(area / 9000), 8, function (x, y) { return { x: x, y: y, s: (4 + rnd() * 4) * sc, ph: rnd() * 6.28, hue: rnd() }; });
-    bushes = scatter(rnd, Math.round(area / 70000), 18, function (x, y) { return { x: x, y: y, s: (11 + rnd() * 8) * sc, ph: rnd() * 6.28 }; });
-    trees = scatter(rnd, Math.max(5, Math.round(area / 85000)), 40 * sc, function (x, y) { return { x: x, y: y, s: (26 + rnd() * 20) * sc, pink: rnd() < 0.3, ph: rnd() * 6.28 }; });
-    trees.sort(function (a, b) { return a.y - b.y; });
-    lilies = []; rocks = [];
-    for (i = 0; i < Math.round(W / 130); i++) { var lx = rnd() * W; lilies.push(el({ x: lx, y: ry(lx) + (rnd() - 0.5) * hw(lx) * 1.2, s: (6 + rnd() * 4) * sc, fl: rnd() < 0.5, ph: rnd() * 6.28 })); }
-    for (i = 0; i < Math.round(W / 240); i++) { var qx = rnd() * W; rocks.push({ x: qx, y: ry(qx) + (rnd() - 0.5) * hw(qx) * 1.1, s: (5 + rnd() * 6) * sc, rot: rnd() * 3 }); }
-    stones = [];
-    for (i = 0; i < Math.round(H / 16); i++) { var sy = rnd() * H; stones.push({ x: pathX(sy) + (rnd() - 0.5) * 14 * sc, y: sy, s: (1.2 + rnd() * 1.6) * sc }); }
-    var best = 1e9, yb = H / 2;
-    for (var y = 0; y <= H; y += 2) { var dd = Math.abs(y - ry(pathX(y))); if (dd < best) { best = dd; yb = y; } }
-    var xb = pathX(yb);
-    bridge = { x: xb, y: yb, ang: Math.atan2(pathX(yb + 10) - pathX(yb - 10), 20), len: 2 * hw(xb) + 46 * sc, w: 34 * sc };
-    petals = [];
-    for (i = 0; i < Math.round(W / 45); i++) petals.push({ x: rnd() * W, y: rnd() * H, vx: 0, vy: 0, rot: rnd() * 6.28, s: (3 + rnd() * 3) * sc });
-  }
-  function blow(e, gain, max) {
-    var dx = e.x - px, dy = e.y - py, f = 1 - Math.sqrt(dx * dx + dy * dy) / 200;
-    f = f > 0 ? f * f : 0;
-    e.vx += f * wvx * gain - e.ox * 0.07; e.vy += f * wvy * gain - e.oy * 0.07;
-    e.vx *= 0.88; e.vy *= 0.88; e.ox += e.vx; e.oy += e.vy;
-    var m = Math.sqrt(e.ox * e.ox + e.oy * e.oy);
-    if (m > max) { e.ox *= max / m; e.oy *= max / m; }
-  }
-  function step() {
-    if (!still) time += 0.016;
-    var i;
-    wvx *= 0.9; wvy *= 0.9;
-    for (i = 0; i < tufts.length; i++) blow(tufts[i], 0.5, 10);
-    flowers.forEach(function (e) { blow(e, 0.45, 9); });
-    bushes.forEach(function (e) { blow(e, 0.15, 4); });
-    trees.forEach(function (e) { blow(e, 0.3, 12); });
-    lilies.forEach(function (e) { blow(e, 0.3, 10); });
-    petals.forEach(function (p) {
-      var dx = p.x - px, dy = p.y - py, f = 1 - Math.sqrt(dx * dx + dy * dy) / 220;
-      f = f > 0 ? f * f : 0;
-      p.vx += f * wvx * 0.09 + (still ? 0 : 0.006); p.vy += f * wvy * 0.09;
-      p.vx *= 0.95; p.vy *= 0.95; p.x += p.vx; p.y += p.vy; p.rot += (p.vx + p.vy) * 0.05;
-      if (p.x > W + 10) p.x = -10; if (p.x < -10) p.x = W + 10;
-      if (p.y > H + 10) p.y = -10; if (p.y < -10) p.y = H + 10;
-    });
-    streaks.forEach(function (k) { k.life += 0.028; k.x += k.dx * 5; k.y += k.dy * 5; });
-    streaks = streaks.filter(function (k) { return k.life < 1; });
-    ripples.forEach(function (r) { r.a += 0.02; });
-    ripples = ripples.filter(function (r) { return r.a < 1; });
-  }
-  function circle(x, y, r) { ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.29); }
-  function riverShape(extra) {
-    ctx.beginPath();
-    var x;
-    for (x = -20; x <= W + 20; x += 12) ctx.lineTo(x, ry(x) - hw(x) - extra);
-    for (x = W + 20; x >= -20; x -= 12) ctx.lineTo(x, ry(x) + hw(x) + extra);
-    ctx.closePath();
-  }
-  function draw() {
-    var i, x, y;
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = col.meadow; ctx.fillRect(0, 0, W, H);
-    blobs.forEach(function (b) {
-      ctx.globalAlpha = 0.22; ctx.fillStyle = b.light ? col.surface : col.accent;
-      ctx.beginPath(); ctx.ellipse(b.x, b.y, b.rx, b.ry, b.rot, 0, 6.29); ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-    /* rivière : berge, eau, profondeur */
-    ctx.fillStyle = col.path; riverShape(7 * sc); ctx.fill();
-    ctx.fillStyle = col.sky; riverShape(0); ctx.fill();
-    ctx.globalAlpha = 0.12; ctx.fillStyle = col.accent; riverShape(-hw(0) * 0.45); ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = '#FFFFFF'; ctx.lineCap = 'round'; ctx.lineWidth = 1.5 * sc;
-    ctx.globalAlpha = 0.55; ctx.beginPath();
-    for (i = 0; i < Math.round(W / 26); i++) {
-      x = ((i * 97.3 + time * 42) % (W + 80)) - 40;
-      var off = (Math.sin(i * 12.9898) * 0.5) * 1.5 * hw(x), ln = (10 + (i % 5) * 4) * sc;
-      ctx.moveTo(x, ry(x) + off); ctx.lineTo(x + ln, ry(x + ln) + off);
-    }
-    ctx.stroke(); ctx.globalAlpha = 1;
-    rocks.forEach(function (q) {
-      ctx.strokeStyle = '#FFFFFF'; ctx.globalAlpha = 0.6; ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.arc(q.x + q.s * 0.2, q.y, q.s * 1.5, -0.9, 0.9); ctx.stroke();
-      ctx.globalAlpha = 1; ctx.fillStyle = ROCK;
-      ctx.beginPath(); ctx.ellipse(q.x, q.y, q.s, q.s * 0.75, q.rot, 0, 6.29); ctx.fill();
-    });
-    ripples.forEach(function (r) {
-      ctx.strokeStyle = '#FFFFFF'; ctx.globalAlpha = 0.8 * (1 - r.a); ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.arc(r.x, r.y, r.r * (0.25 + r.a), 0, 6.29); ctx.stroke();
-    });
-    ctx.globalAlpha = 1;
-    lilies.forEach(function (l) {
-      var lx = l.x + l.ox + Math.sin(time * 0.8 + l.ph) * 1.5, ly = l.y + l.oy;
-      ctx.fillStyle = col.accent; ctx.globalAlpha = 0.85;
-      ctx.beginPath(); ctx.moveTo(lx, ly); ctx.arc(lx, ly, l.s, l.ph, l.ph + 5.6); ctx.closePath(); ctx.fill();
-      ctx.globalAlpha = 1;
-      if (l.fl) { ctx.fillStyle = col.jade; ctx.beginPath(); circle(lx, ly, l.s * 0.38); ctx.fill(); ctx.fillStyle = col.path; ctx.beginPath(); circle(lx, ly, l.s * 0.15); ctx.fill(); }
-    });
-    /* chemin */
-    ctx.lineJoin = 'round'; ctx.lineCap = 'butt';
-    ctx.beginPath();
-    for (y = -20; y <= H + 20; y += 10) ctx.lineTo(pathX(y), y);
-    ctx.strokeStyle = col.line; ctx.lineWidth = 22 * sc + 6; ctx.stroke();
-    ctx.strokeStyle = col.path; ctx.lineWidth = 22 * sc; ctx.stroke();
-    ctx.fillStyle = col.line; ctx.beginPath();
-    stones.forEach(function (st) { circle(st.x, st.y, st.s); });
-    ctx.fill();
-    /* pont */
-    ctx.save(); ctx.translate(bridge.x, bridge.y); ctx.rotate(-bridge.ang);
-    ctx.globalAlpha = 0.25; ctx.fillStyle = col.accent; ctx.fillRect(-bridge.w / 2 + 6, -bridge.len / 2 + 8, bridge.w, bridge.len);
-    ctx.globalAlpha = 1; ctx.fillStyle = WOOD; ctx.fillRect(-bridge.w / 2, -bridge.len / 2, bridge.w, bridge.len);
-    ctx.strokeStyle = WOOD_D; ctx.lineWidth = 1; ctx.beginPath();
-    for (y = -bridge.len / 2 + 6; y < bridge.len / 2; y += 7 * sc) { ctx.moveTo(-bridge.w / 2, y); ctx.lineTo(bridge.w / 2, y); }
-    ctx.stroke();
-    ctx.lineWidth = 3.5 * sc; ctx.beginPath();
-    ctx.moveTo(-bridge.w / 2, -bridge.len / 2); ctx.lineTo(-bridge.w / 2, bridge.len / 2);
-    ctx.moveTo(bridge.w / 2, -bridge.len / 2); ctx.lineTo(bridge.w / 2, bridge.len / 2);
-    ctx.stroke(); ctx.restore();
-    /* herbe : deux passes, une par teinte */
-    ctx.lineCap = 'round'; ctx.lineWidth = 1.3 * sc;
-    for (var pass = 0; pass < 2; pass++) {
-      ctx.strokeStyle = pass ? col.surface : col.accent; ctx.globalAlpha = pass ? 0.8 : 0.5;
-      ctx.beginPath();
-      for (i = 0; i < tufts.length; i++) {
-        var t = tufts[i];
-        if (t.light !== !!pass) continue;
-        var ax = t.ox + Math.sin(time * 1.1 - t.x * 0.012 + t.ph) * 1.8, ay = t.oy - t.len;
-        ctx.moveTo(t.x - 2.5, t.y); ctx.lineTo(t.x - 3.5 + ax * 0.8, t.y + ay * 0.8);
-        ctx.moveTo(t.x, t.y); ctx.lineTo(t.x + ax, t.y + ay);
-        ctx.moveTo(t.x + 2.5, t.y); ctx.lineTo(t.x + 3.5 + ax * 0.8, t.y + ay * 0.8);
-      }
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-    flowers.forEach(function (f) {
-      var fx = f.x + f.ox + Math.sin(time * 1.3 - f.x * 0.012 + f.ph) * 1.5, fy = f.y + f.oy, pr = f.s * 0.5;
-      ctx.strokeStyle = col.accent; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(fx, fy); ctx.stroke();
-      ctx.fillStyle = f.hue < 0.65 ? col.jade : (f.hue < 0.88 ? col.path : col.sky);
-      ctx.beginPath();
-      for (var k = 0; k < 5; k++) circle(fx + Math.cos(k * 1.2566 + f.ph) * pr, fy + Math.sin(k * 1.2566 + f.ph) * pr, pr * 0.8);
-      ctx.fill();
-      ctx.fillStyle = col.seal; ctx.beginPath(); circle(fx, fy, pr * 0.5); ctx.fill();
-    });
-    bushes.forEach(function (b) {
-      var bx = b.x + b.ox, by = b.y + b.oy;
-      ctx.globalAlpha = 0.22; ctx.fillStyle = col.accent; ctx.beginPath(); circle(b.x + 4, b.y + 5, b.s); ctx.fill();
-      ctx.globalAlpha = 1; ctx.fillStyle = col.line; ctx.beginPath();
-      circle(bx - b.s * 0.4, by, b.s * 0.7); circle(bx + b.s * 0.4, by + b.s * 0.1, b.s * 0.75); circle(bx, by - b.s * 0.35, b.s * 0.7); ctx.fill();
-      ctx.fillStyle = col.surface; ctx.globalAlpha = 0.5; ctx.beginPath(); circle(bx - b.s * 0.2, by - b.s * 0.4, b.s * 0.3); ctx.fill(); ctx.globalAlpha = 1;
-    });
-    trees.forEach(function (tr) {
-      var cx = tr.x + tr.ox, cy = tr.y + tr.oy, k;
-      ctx.globalAlpha = 0.25; ctx.fillStyle = col.accent; ctx.beginPath(); ctx.ellipse(tr.x + tr.s * 0.3, tr.y + tr.s * 0.35, tr.s * 1.05, tr.s * 0.95, 0, 0, 6.29); ctx.fill();
-      ctx.globalAlpha = 1; ctx.fillStyle = tr.pink ? col.jade : col.accent; ctx.beginPath();
-      for (k = 0; k < 7; k++) {
-        var wob = Math.sin(time * 1.4 + tr.ph + k) * 1.5;
-        circle(cx + Math.cos(k * 0.898 + tr.ph) * tr.s * 0.5 + wob + tr.ox * 0.25 * (k % 3), cy + Math.sin(k * 0.898 + tr.ph) * tr.s * 0.5 + tr.oy * 0.25 * (k % 3), tr.s * 0.52);
-      }
-      circle(cx, cy, tr.s * 0.6); ctx.fill();
-      ctx.globalAlpha = tr.pink ? 0.55 : 0.28; ctx.fillStyle = tr.pink ? col.path : col.surface; ctx.beginPath();
-      for (k = 0; k < 4; k++) circle(cx - tr.s * 0.25 + Math.cos(k * 1.7 + tr.ph) * tr.s * 0.35, cy - tr.s * 0.25 + Math.sin(k * 1.7 + tr.ph) * tr.s * 0.3, tr.s * 0.22);
-      ctx.fill(); ctx.globalAlpha = 1;
-    });
-    ctx.fillStyle = col.jade;
-    petals.forEach(function (p) {
-      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-      ctx.beginPath(); ctx.ellipse(0, 0, p.s, p.s * 0.5, 0, 0, 6.29); ctx.fill(); ctx.restore();
-    });
-    ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.6 * sc; ctx.lineCap = 'round';
-    streaks.forEach(function (k) {
-      ctx.globalAlpha = Math.sin(Math.PI * k.life) * 0.75;
-      ctx.beginPath();
-      for (var j = 0; j <= 10; j++) {
-        var u = j / 10, curl = Math.sin(u * 6.28 + k.life * 9 + k.ph) * 6 * u;
-        ctx.lineTo(k.x + k.dx * u * k.len - k.dy * curl, k.y + k.dy * u * k.len + k.dx * curl);
-      }
-      ctx.stroke();
-    });
-    ctx.globalAlpha = 1;
-  }
-  function loop() {
-    if (visible) { if (frame++ % 90 === 0) readColors(); step(); draw(); }
-    requestAnimationFrame(loop);
-  }
-  hero.addEventListener('pointermove', function (e) {
-    var r = canvas.getBoundingClientRect(), nx = e.clientX - r.left, ny = e.clientY - r.top;
-    if (inside) {
-      wvx += (nx - px) * 0.5; wvy += (ny - py) * 0.5;
-      var m = Math.sqrt(wvx * wvx + wvy * wvy);
-      if (m > 30) { wvx *= 30 / m; wvy *= 30 / m; }
-      if (m > 5 && streaks.length < 14 && Math.random() < 0.6) {
-        streaks.push({ x: nx + (Math.random() - 0.5) * 90, y: ny + (Math.random() - 0.5) * 90, dx: wvx / m, dy: wvy / m, len: 40 + m * 3, life: 0, ph: Math.random() * 6.28 });
-      }
-      if (onRiver(nx, ny, 0) && (ripples.length === 0 || ripples[ripples.length - 1].a > 0.15)) ripples.push({ x: nx, y: ny, r: 26 * sc, a: 0 });
-    }
-    px = nx; py = ny; inside = true;
-  });
-  hero.addEventListener('pointerleave', function () { inside = false; });
-  hero.addEventListener('pointerdown', function (e) {
-    var r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
-    if (onRiver(x, y, 0)) ripples.push({ x: x, y: y, r: 60 * sc, a: 0 });
-  });
-  window.addEventListener('resize', build);
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(hero);
-  readColors(); build(); requestAnimationFrame(loop);
 })();
 </script>
 
